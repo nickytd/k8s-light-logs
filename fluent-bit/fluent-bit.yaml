@@ -1,0 +1,23 @@
+---
+apiVersion: fluentbit.fluent.io/v1alpha2
+kind: FluentBit
+metadata:
+  name: fluent-bit
+  labels:
+    app.kubernetes.io/name: fluent-bit # required for the operator to manage the resource
+spec:
+  namespaceFluentBitCfgSelector: {}
+  positionDB:
+    hostPath:
+      path: /var/lib/fluent-bit/
+  securityContext:
+    runAsUser: 0 # required by systemd input plugin
+  resources:
+    limits:
+      cpu: 500m
+      memory: 200Mi
+    requests:
+      cpu: 10m
+      memory: 25Mi
+  tolerations:
+    - operator: Exists

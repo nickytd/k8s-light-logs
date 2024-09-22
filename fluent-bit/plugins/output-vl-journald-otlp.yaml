@@ -1,0 +1,17 @@
+apiVersion: fluentbit.fluent.io/v1alpha2
+kind: ClusterOutput
+metadata:
+  labels:
+    fluentbit.fluent.io/enabled: "true"
+  name: vl-otlp-journald
+spec:
+  match: 'journald.*'
+  retry_limit: "5"
+  opentelemetry:
+    host:                       victorialogs-victoria-logs-single-server.victoria-logs
+    port:                       9428
+    logsUri:                    /insert/opentelemetry/v1/logs
+    logResponsePayload:         true
+    logsBodyKeyAttributes:      true # not yet released in 3.1.0, requires latest operator and crds from main branch
+    header:
+      VL-Stream-Fields: "host.id,host.name,service.name,service.namespace,process.pid,process.command"

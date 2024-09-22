@@ -1,0 +1,48 @@
+operator:
+  disableComponentControllers: "fluentd"
+  resources:
+      limits:
+        cpu: 100m
+        memory: 128Mi
+      requests:
+        cpu: 10m
+        memory: 64Mi
+
+containerRuntime: containerd
+
+fluentd:
+  crdsEnable: false
+  enable: false
+
+fluentbit:
+  dnsConfig:
+    options:
+      - name: ndots
+        value: "3"
+  additionalVolumes:
+    - name: host-buffer
+      hostPath:
+        path: /tmp/fluent-bit-buffer
+  additionalVolumesMounts:
+    - mountPath: /var/fluentbit # set for db field in tail input
+      name: host-buffer
+
+  input:
+    tail:
+      enable: false
+    systemd:
+      enable: false
+
+  output:
+    stdout:
+      enable: false
+
+  filter:
+    multiline:
+      enable: false
+    kubernetes:
+      enable: false
+    containerd:
+      enable: false
+    systemd:
+      enable: false

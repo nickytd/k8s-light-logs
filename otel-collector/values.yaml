@@ -1,0 +1,11 @@
+manager:
+  collectorImage:
+    repository: "otel/opentelemetry-collector-contrib"
+    tag: "0.109.0"
+
+admissionWebhooks:
+  create: true
+  certManager:
+    enabled: false
+  autoGenerateCert:
+    enabled: true

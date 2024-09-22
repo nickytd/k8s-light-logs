@@ -1,0 +1,21 @@
+---
+apiVersion: fluentbit.fluent.io/v1alpha2
+kind: ClusterInput
+metadata:
+  name: tail-kube
+  labels:
+    fluentbit.fluent.io/enabled: "true"
+spec:
+  tail:
+    excludePath: "\"*fluent-bit*,*otel*\""
+    ignoredOlder: 60m
+    memBufLimit: 30MB
+    path: "/var/log/containers/*.log"
+    refreshIntervalSeconds: 10
+    skipLongLines: true
+    readFromHead: false
+    tag: "kube.*"
+    parser: "cri"
+  processors:
+    logs:
+      - name: opentelemetry_envelope

@@ -1,0 +1,15 @@
+apiVersion: fluentbit.fluent.io/v1alpha2
+kind: ClusterFilter
+metadata:
+  labels:
+    fluentbit.fluent.io/enabled: "true"
+  name: journald
+spec:
+  match: journald.*
+  filters:
+   - lua:
+      call: add_time_and_systemd_attr
+      timeAsTable: true
+      script:
+        name: lua-scripts
+        key: add_time_and_systemd_attr.lua

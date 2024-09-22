@@ -1,0 +1,53 @@
+---
+apiVersion: opentelemetry.io/v1beta1
+kind: OpenTelemetryCollector
+metadata:
+  name: otel-k8s-event-vl
+spec:
+  serviceAccount: otel-k8s-events
+  mode: deployment
+  resources:
+    requests:
+      memory: 32Mi
+      cpu: 5m
+    limits:
+      memory: 200Mi
+      cpu: 200m
+  config:
+    receivers:
+      otlp:
+        protocols:
+          http:
+            # Since this collector needs to receive data from the web, enable cors for all origins
+            # `allowed_origins` can be refined for your deployment domain
+            cors:
+              allowed_origins:
+                - "http://*"
+                - "https://*"
+            endpoint: 0.0.0.0:4318
+          grpc:
+            endpoint: 0.0.0.0:4317 # endpoint is required
+      k8s_events: # This receiver is used to receive k8s events and requires the service account to have the necessary permissions
+        namespaces: []
+
+    processors:
+      batch:
+        timeout: 5s
+        send_batch_size: 1000
+
+    exporters:
+      debug:
+        verbosity: detailed
+        sampling_initial: 5
+        sampling_thereafter: 1000
+      otlphttp/k8s_events:
+        logs_endpoint: http://victorialogs-victoria-logs-single-server.victoria-logs.svc.cluster.local:9428/insert/opentelemetry/v1/logs
+        headers:
+          VL-Stream-Fields: "k8s.event.name,k8s.namespace.name"
+
+    service:
+      pipelines:
+        logs:
+          receivers: [k8s_events]
+          processors: [batch]
+          exporters: [debug,otlphttp/k8s_events]

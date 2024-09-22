@@ -1,0 +1,16 @@
+apiVersion: fluentbit.fluent.io/v1alpha2
+kind: ClusterOutput
+metadata:
+  labels:
+    fluentbit.fluent.io/enabled: "true"
+  name: vl-journald
+spec:
+  match: '__shall_not_match.*'
+  retry_limit: "5"
+  http:
+    host: 'victorialogs-victoria-logs-single-server.victoria-logs'
+    port: 9428
+    compress: gzip
+    uri: /insert/jsonline?_stream_fields=stream,service.name,host.name,process.command&_msg_field=log&_time_field=time
+    format: json_lines
+    jsonDateFormat: iso8601
