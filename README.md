@@ -1,4 +1,14 @@
-# k8s-victoria-otel-logstack
+# k8s-light-logs
+
+A simple logging stack for kubernetes cluster collecting logs from multiple sources:
+
+- container logs
+- systemd services
+- k8s events
+
+![k8s-victoria-otel-logstack](/images/k8s-victoria-otel-logstack.png)
+
+It packs and delivers the logs in `opentelemetry` logs format enriching the logs with source `attributes` following the otel `semantic convention`.
 
 Contents:
 
@@ -17,7 +27,7 @@ There are two key guiding principles in this example:
 
 The example here illustrates the deployment of log shippers, pipelines and backend using respective projects guidelines and brings the necessary additional resources and configurations. Optional components such as `prometheus` or `ingress-controller` may be installed to expose the full set of the supported scenarios.
 
-The purpose of the repo, as of today, is to quickly provide a logging stack for k8s clusters that later can be extended to serve `production` environments. For example at the moment the repo does not provide out of the box end to end `tls` encryption configurations. The ingress endpoints and the service monitoring are not exposed by default. Those shall be added later in specific deployments.
+The purpose of the repo, as of today, is to quickly provide a logging stack for k8s clusters that later can be extended to serve `production` environments. For example at the moment the repo does not provide, out of the box, end to end `tls` encryption configurations. By default, the ingress endpoints and the service monitoring are not exposed . Those shall be added later in specific deployments.
 
 ## Components
 

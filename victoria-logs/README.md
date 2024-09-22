@@ -4,6 +4,8 @@ A simple single process deployment of victoria-logs. By default the prometheus s
 
 After successfull deployment, victoria-logs can be accessed with port forwarding of the respective service at `http://localhost:9428`.
 
+![vmui](/images/vmui.png)
+
 ```bash
 kubectl port-forward svc/victorialogs-victoria-logs-single-server 9428:9428 -n victoria-logs
 ```
