@@ -7,7 +7,7 @@ metadata:
     fluentbit.fluent.io/enabled: "true"
 spec:
   tail:
-    excludePath: "\"*fluent-bit*,*otel*\""
+    excludePath: '"*_fluent-bit_*,*_otel_*"'
     ignoredOlder: 60m
     memBufLimit: 30MB
     path: "/var/log/containers/*.log"
