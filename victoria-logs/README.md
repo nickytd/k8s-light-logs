@@ -7,7 +7,7 @@ After successfull deployment, victoria-logs can be accessed with port forwarding
 ![vmui](/images/vmui.png)
 
 ```bash
-kubectl port-forward svc/victorialogs-victoria-logs-single-server 9428:9428 -n victoria-logs
+kubectl port-forward svc/vlogs-single 9428:9428 -n victoria-logs
 ```
 
 
@@ -50,9 +50,3 @@ kubectl port-forward svc/victorialogs-victoria-logs-single-server 9428:9428 -n v
 - [Strategies for Efficient Log Management in Large-Scale Kubernetes Clusters](https://youtu.be/b9o9UC6xmbc?si=1NUZhYAGl0zuher_)
 - [VictoriaMetrics Meetup June 2023: Introducing VictoriaLogs | Open Source Logs management](https://youtu.be/yt0ukL5X2pQ?t=1389)
 - [VictoriaLogs Update June 2024](https://www.youtube.com/watch?v=hzlMA_Ae9_4&t=3660s)
-
-## Setup
-
-- Set `persistentVolume.enabled=true` if running in a standard kubernetes cluster supporting persistence volumes.
-- Set `serviceMonitor.enabled=true` if the cluster runs [prometheus operator](https://github.com/prometheus-operator/prometheus-operator)
-- Set `ingress.enabled=true` it the cluster runs an ingress controller.

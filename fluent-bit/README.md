@@ -8,13 +8,15 @@ It leverages the [opentelemetry-envelope processor](https://docs.fluentbit.io/ma
 
 ## Setup
 
-By default the fluent-operator deploys a pipeline with predefined set of input, filter and output plugins. However the current version of the operator does not support out of the box the configuration mode (yaml) required by the fluent-bit to specify the `opentelemetry-envelope` [config](https://docs.fluentbit.io/manual/administration/configuring-fluent-bit/yaml/configuration-file).
+By default the fluent-operator deploys a pipeline with a predefined set of input, filter and output plugins. However the current version of the operator does not support, out of the box, the fluent-bit yaml configuration mode. The yaml configuration mode is required by the `opentelemetry-envelope` [config](https://docs.fluentbit.io/manual/administration/configuring-fluent-bit/yaml/configuration-file).
 
 > This functionality is only exposed in YAML configuration and not in classic configuration mode due to the restriction of nested levels of configuration.
 
-Thus this setup switches the configuration in `yaml` format and applies the required fluent-bit plugins.
+Thus this setup switches the configuration in `yaml` format by patching the `ClusterFluentBitConfig` resource and applies the required fluent-bit plugins.
 
 ### Pipelines
+
+This setup provides two fluent-bit pipelines.
 
 #### Container logs pipeline
 

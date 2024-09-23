@@ -33,17 +33,24 @@ The purpose of the repo, as of today, is to quickly provide a logging stack for 
 
 This repo illustrates the deployment of:
 
-- [fluent/fluent-operator](https://github.com/fluent/fluent-operator)
+- [fluent-operator](https://github.com/fluent/fluent-operator)
 - [fluent-operator/fluent-bit](/fluent-bit/fluent-bit.yaml)
-- [victoria-logs-single/helm chart](https://github.com/VictoriaMetrics/helm-charts/tree/master/charts/victoria-logs-single)
+- [victoria-metrics-operator](https://github.com/VictoriaMetrics/operator)
+- [victoria-metrics-operator/victoria-logs](/victoria-logs/victoria-logs.yaml)
 
 And optionally:
 
-- [open-telemetry/opentelemetry-operator](https://github.com/open-telemetry/opentelemetry-operator)
+- [opentelemetry-operator](https://github.com/open-telemetry/opentelemetry-operator)
 - [opentelemetry-operator/otel-collector](/otel-collector/otel-collector.yaml)
 
 To setup the stack:
 
 1. [Deploy](/victoria-logs/setup.sh) single instance victoria-logs
-1. [Deploy](/fluent-bit/setup.sh) fluent operator and fluent-bit
-1. Optionally [deploy](/otel-collector/setup.sh) the otel-collector
+2. [Deploy](/fluent-bit/setup.sh) fluent operator and fluent-bit
+3. Optionally [deploy](/otel-collector/setup.sh) the otel-collector
+
+Or simply run
+
+```bash
+./setup.sh
+```
