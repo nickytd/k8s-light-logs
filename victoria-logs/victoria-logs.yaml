@@ -1,0 +1,18 @@
+---
+apiVersion: operator.victoriametrics.com/v1beta1
+kind: VLogs
+metadata:
+  name: single
+spec:
+  image:
+    repository: victoriametrics/victoria-logs
+    tag: v0.29.0-victorialogs
+  logLevel: INFO
+  retentionPeriod: 7d
+  resources:
+    limits:
+      cpu: 500m
+      memory: 128Mi
+    requests:
+      cpu: 10m
+      memory: 32Mi

@@ -1,28 +1,16 @@
-server:
-  enabled: true
-  extraArgs:
-    envflag.enable: "true"
-    envflag.prefix: VM_
-    loggerFormat: json
-    retentionPeriod: 7d
-    retention.maxDiskSpaceUsageBytes: 5GiB
-  image:
-    tag: "v0.29.0-victorialogs"
+operator:
+  # -- By default, operator converts prometheus-operator objects.
+  disable_prometheus_converter: true
 
-  persistentVolume:
-    enabled: false
-    # size: 5Gi
+watchNamespaces: ["victoria-logs"]
 
-  resources:
-    limits:
-      cpu: 500m
-      memory: 128Mi
-    requests:
-      cpu: 10m
-      memory: 32Mi
+# -- Resource object
+resources:
+  limits:
+    cpu: 100m
+    memory: 64Mi
+  requests:
+    cpu: 10m
+    memory: 32Mi
 
-  serviceMonitor:
-    enabled: false
-
-  ingress:
-    enabled: false
+nameOverride: "victoria-metrics-operator"
