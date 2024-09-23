@@ -8,7 +8,7 @@ spec:
   match: 'kube.*'
   retry_limit: "5"
   opentelemetry:
-    host:                       victorialogs-victoria-logs-single-server.victoria-logs
+    host:                       vlogs-single.victoria-logs.svc.cluster.local
     port:                       9428
     logsUri:                    /insert/opentelemetry/v1/logs
     logResponsePayload:         true
