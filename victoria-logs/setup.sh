@@ -5,26 +5,21 @@ set -o nounset
 set -o pipefail
 
 dir=$(dirname $0)
+source $dir/../.include.sh
 
-version=${1:-"0.6.3"}
+version=${1:-"0.34.8"}
 namespace=${2:-"victoria-logs"}
-chart_url=${3:-"https://github.com/VictoriaMetrics/helm-charts/releases/download/victoria-logs-single-$version/victoria-logs-single-$version.tgz"}
+operator_chart_url=${3:-"https://github.com/VictoriaMetrics/helm-charts/releases/download/victoria-metrics-operator-$version/victoria-metrics-operator-$version.tgz"}
 
-
-function create-namespace(){
-    # Create namespace
-    kubectl create namespace $namespace \
-        --dry-run=client -o yaml | kubectl apply -f -
-}
 
 function deploy-victorialogs(){
-    helm upgrade victorialogs $chart_url \
+
+    kubectl apply \
         --namespace $namespace \
-        --values $dir/values.yaml \
-        --install \
-        --wait \
-        --timeout 300s
+        -f $dir/victoria-logs.yaml
+
 }
 
-create-namespace
+create-namespace $namespace
+deploy-operator $namespace "victoria-metrics-operator" $operator_chart_url
 deploy-victorialogs

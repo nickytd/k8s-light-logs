@@ -5,16 +5,11 @@ set -o nounset
 set -o pipefail
 
 dir=$(dirname $0)
+source $dir/../.include.sh
 
 version=${1:-"v3.2.0"}
 namespace=${2:-"fluent-bit"}
 operator_chart_url=${3:-"https://github.com/fluent/fluent-operator/releases/download/$version/fluent-operator.tgz"}
-
-function create-namespace(){
-    # Create namespace
-    kubectl create namespace $namespace \
-        --dry-run=client -o yaml | kubectl apply -f -
-}
 
 function create-lua-configmap(){
     # Create configmap for fluent-bit containing lua scripts
@@ -26,26 +21,7 @@ function create-lua-configmap(){
         --dry-run=client -o yaml | kubectl apply -f -
 }
 
-function deploy-fluent-operator(){
-
-    helm upgrade fluent-operator $operator_chart_url \
-        --namespace $namespace \
-        --values $dir/values.yaml \
-        --install \
-        --wait \
-        --timeout 300s
-
-    # Wait for fluent-operator deployment to be available
-    kubectl wait --for=condition=Available deployment \
-        -l app.kubernetes.io/name=fluent-operator \
-        --namespace $namespace \
-        --timeout=300s
-
-    # Wait for fluent-operator pod to be ready
-    kubectl wait --for=condition=Ready pod \
-        -l app.kubernetes.io/name=fluent-operator \
-        --namespace $namespace \
-        --timeout=300s
+function patch-fluent-bit-config(){
 
     # Switch fluent-bit config file format to yaml.
     # It is required to support fluent-bit processors and fluent-operator by default uses old conf format.
@@ -54,6 +30,14 @@ function deploy-fluent-operator(){
     # This path can be removed when:
     # - fluent-bit supports multiple parsers files in yaml configuration format
     # - fluent-operator supports fluent-bit config file format in yaml by default or by configuration
+    if [ ! -z $(kubectl get cfbc fluent-bit-config --namespace $namespace -o jsonpath='{.spec.service.parsersFiles}') ]; then
+        kubectl patch cfbc fluent-bit-config \
+            --namespace $namespace \
+            --type="json" \
+            --patch='[
+                {"op": "remove", "path": "/spec/service/parsersFiles"},
+            ]'
+    fi
 
      kubectl patch cfbc fluent-bit-config \
      --namespace $namespace \
@@ -61,7 +45,6 @@ function deploy-fluent-operator(){
      --allow-missing-template-keys="true" \
      --patch='[
         {"op": "replace", "path": "/spec/configFileFormat", "value": "yaml"},
-        {"op": "remove", "path": "/spec/service/parsersFiles"},
         {"op": "replace", "path": "/spec/service/parsersFile", "value": "/fluent-bit/etc/parsers.conf"},
       ]'
 
@@ -97,8 +80,9 @@ function deploy-fluent-bit-resources(){
 
 
 # Fluent-bit setup
-create-namespace
+create-namespace $namespace
 create-lua-configmap
-deploy-fluent-operator
+deploy-operator $namespace fluent-operator $operator_chart_url
+patch-fluent-bit-config
 deploy-fluent-bit-resources
 deploy-fluent-bit
