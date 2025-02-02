@@ -7,7 +7,7 @@ set -o pipefail
 dir="$(cd $(dirname ${BASH_SOURCE[0]}) && pwd)"
 source $dir/../.include.sh
 
-version=${1:-"0.69.0"}
+version=${1:-"0.79.0"}
 namespace=${2:-"otel"}
 operator_chart_url=${3:-"https://github.com/open-telemetry/opentelemetry-helm-charts/releases/download/opentelemetry-operator-$version/opentelemetry-operator-$version.tgz"}
 
