@@ -4,7 +4,8 @@ set -o errexit
 set -o nounset
 set -o pipefail
 
-dir=$(dirname $0)
+
+dir="$(cd $(dirname ${BASH_SOURCE[0]}) && pwd)"
 
 
 printf '\u2714 Installing "%s"\n' "victoria-logs"

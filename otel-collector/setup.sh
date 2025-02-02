@@ -4,7 +4,7 @@ set -o errexit
 set -o nounset
 set -o pipefail
 
-dir=$(dirname $0)
+dir="$(cd $(dirname ${BASH_SOURCE[0]}) && pwd)"
 source $dir/../.include.sh
 
 version=${1:-"0.69.0"}
